@@ -71,7 +71,7 @@
             android:value="${UMENG_CHANNEL_VALUE}" />
 
         <meta-data android:value="5b853c8ab27b0a538c000051" android:name="UMENG_APPKEY"></meta-data>
-        <meta-data android:value="Google Play" android:name="UMENG_CHANNEL"/>
+        <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -22,11 +22,21 @@ android {
         pyger{
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "pyger"]
         }
+        googlePaly{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "googlePaly"]
+        }
     }
 
-    lintOptions {
+
+    lintOptions{
         abortOnError false
+        disable 'MissingTranslation'
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     buildTypes {
         release {
             buildConfigField "boolean", "IS_RELEASE", "true"
@@ -37,7 +47,7 @@ android {
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         //这里修改apk文件名
-                        def fileName = APP_NAME +"_"+"${variant.productFlavors[0].name}"+ "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ").apk"
+                        def fileName = "陆剧小说大全" +"_"+"${variant.productFlavors[0].name}"+ "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ").apk"
                         output.outputFile = new File(outputFile.parent, fileName)
                     }
                 }
@@ -94,6 +104,7 @@ dependencies {
     compile files('libs/commons-codec-1.10-sources.jar')
     compile files('libs/juniversalchardet-1.0.3.jar')
     compile files('libs/utdid4all-1.0.4.jar')
+    compile files('libs/umeng-analytics-v6.1.1.jar')
 
     compile 'com.google.firebase:firebase-ads:11.0.1'
 
@@ -102,8 +113,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:11.0.1'
     compile 'com.google.android.gms:play-services-ads:11.0.1'
 
-    //友盟统计
-    compile 'com.umeng.analytics:analytics:latest.integration'
 }
 
 greendao {

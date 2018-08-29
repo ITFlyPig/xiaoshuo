@@ -93,7 +93,6 @@ dependencies {
     compile 'com.victor:lib:1.0.4'
     compile files('libs/commons-codec-1.10-sources.jar')
     compile files('libs/juniversalchardet-1.0.3.jar')
-    compile files('libs/umeng-analytics-v6.1.1.jar')
     compile files('libs/utdid4all-1.0.4.jar')
 
     compile 'com.google.firebase:firebase-ads:11.0.1'
@@ -102,6 +101,9 @@ dependencies {
 
     compile 'com.google.android.gms:play-services:11.0.1'
     compile 'com.google.android.gms:play-services-ads:11.0.1'
+
+    //友盟统计
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }
 
 greendao {

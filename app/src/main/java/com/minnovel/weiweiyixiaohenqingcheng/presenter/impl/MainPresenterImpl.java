@@ -85,6 +85,9 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                                 startRefreshBook(value);
                             } else {
                                 mView.refreshFinish();
+                                if (value == null || value.size() == 0) {
+                                    loadNovelsFromAssets();
+                                }
                             }
                         }
                     }

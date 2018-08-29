@@ -4,7 +4,6 @@ package com.minnovel.weiweiyixiaohenqingcheng.view.impl;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,21 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
-import com.baidu.autoupdatesdk.UICheckUpdateCallback;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.minnovel.weiweiyixiaohenqingcheng.BitIntentDataManager;
-import com.minnovel.weiweiyixiaohenqingcheng.base.MBaseActivity;
-import com.minnovel.weiweiyixiaohenqingcheng.bean.BookShelfBean;
-import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.BookDetailPresenterImpl;
-import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.MainPresenterImpl;
-import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.ReadBookPresenterImpl;
-import com.minnovel.weiweiyixiaohenqingcheng.view.adapter.BookShelfAdapter;
-import com.minnovel.weiweiyixiaohenqingcheng.view.popupwindow.DownloadListPop;
-import com.minnovel.weiweiyixiaohenqingcheng.widget.refreshview.OnRefreshWithProgressListener;
-import com.minnovel.weiweiyixiaohenqingcheng.widget.refreshview.RefreshRecyclerView;
 import com.minnovel.weiweiyixiaohenqingcheng.BitIntentDataManager;
 import com.minnovel.weiweiyixiaohenqingcheng.R;
 import com.minnovel.weiweiyixiaohenqingcheng.base.MBaseActivity;
@@ -35,8 +19,8 @@ import com.minnovel.weiweiyixiaohenqingcheng.bean.BookShelfBean;
 import com.minnovel.weiweiyixiaohenqingcheng.dao.AssetsDatabaseManager;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.IMainPresenter;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.BookDetailPresenterImpl;
-import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.ReadBookPresenterImpl;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.MainPresenterImpl;
+import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.ReadBookPresenterImpl;
 import com.minnovel.weiweiyixiaohenqingcheng.view.IMainView;
 import com.minnovel.weiweiyixiaohenqingcheng.view.adapter.BookShelfAdapter;
 import com.minnovel.weiweiyixiaohenqingcheng.view.popupwindow.DownloadListPop;
@@ -74,14 +58,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void initData() {
         bookShelfAdapter = new BookShelfAdapter();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mPresenter.loadNovelsFromAssets();
-            }
-        }, 3000);
-
-
     }
 
     @Override
@@ -195,21 +171,21 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void firstRequest() {
         //通过百度API 判断是否有更新
-        try {
-            BDAutoUpdateSDK.uiUpdateAction(this, new UICheckUpdateCallback() {
-                @Override
-                public void onNoUpdateFound() {
-
-                }
-
-                @Override
-                public void onCheckComplete() {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            BDAutoUpdateSDK.uiUpdateAction(this, new UICheckUpdateCallback() {
+//                @Override
+//                public void onNoUpdateFound() {
+//
+//                }
+//
+//                @Override
+//                public void onCheckComplete() {
+//
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         mPresenter.queryBookShelf(false);
     }
 

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "93458390205",
+    "firebase_url": "https://novel-c9326.firebaseio.com",
+    "project_id": "novel-c9326",
+    "storage_bucket": "novel-c9326.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93458390205:android:22110915d3b710c1",
+        "android_client_info": {
+          "package_name": "com.minnovel.weiweiyixiaohenqingcheng"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93458390205-9ttphd2otbq5bu6si1qiij0vfeaaq0ot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn-GWxZVk_AsmyufgdClmA_9BpI--KRbs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

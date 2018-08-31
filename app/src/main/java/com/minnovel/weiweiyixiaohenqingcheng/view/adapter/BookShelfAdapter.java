@@ -25,6 +25,8 @@ import com.minnovel.weiweiyixiaohenqingcheng.widget.refreshview.RefreshRecyclerV
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import me.grantland.widget.AutofitTextView;
 
@@ -39,6 +41,8 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
     private Boolean needAnim = true;
 
     private OnItemClickListener itemClickListener;
+
+    private BookShelfBean mLeast;
 
     public interface OnItemClickListener {
         void toSearch();
@@ -260,8 +264,16 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
             holder.mpbDurprogress.setProgressListener(null);
             holder.tvWatch.setText("去选书");
         } else {
+
+            if (mLeast == null) {
+                mLeast = getLeatestBook();
+            }
+            if (mLeast == null) {
+                return;
+            }
+
             ApplicationInfo appInfo = holder.ivCover.getContext().getApplicationInfo();
-            int resID = holder.ivCover.getContext().getResources().getIdentifier(books.get(index).getBookInfoBean().getCoverUrl(), "drawable", appInfo.packageName);
+            int resID = holder.ivCover.getContext().getResources().getIdentifier(mLeast.getBookInfoBean().getCoverUrl(), "drawable", appInfo.packageName);
             Log.d("cover", "封面：bindLastestViewHolder:---" + books.get(index).getBookInfoBean().getCoverUrl() + "  resID:" + resID);
             Glide.with(holder.ivCover.getContext()).load(resID).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
 
@@ -269,15 +281,15 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
 
             holder.flLastestTip.setVisibility(View.VISIBLE);
 
-            holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
+            holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), mLeast.getBookInfoBean().getName()));
 
-            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterlist() && books.get(index).getBookInfoBean().getChapterlist().size() > books.get(index).getDurChapter()) {
-                holder.tvDurprogress.setText(String.format(holder.tvDurprogress.getContext().getString(R.string.tv_read_durprogress), books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getDurChapter()).getDurChapterName()));
+            if (null != books.get(index).getBookInfoBean() && null != mLeast.getBookInfoBean().getChapterlist() && mLeast.getBookInfoBean().getChapterlist().size() > mLeast.getDurChapter()) {
+                holder.tvDurprogress.setText(String.format(holder.tvDurprogress.getContext().getString(R.string.tv_read_durprogress), mLeast.getBookInfoBean().getChapterlist().get(mLeast.getDurChapter()).getDurChapterName()));
             }
             holder.llDurcursor.setVisibility(View.VISIBLE);
             holder.mpbDurprogress.setVisibility(View.VISIBLE);
-            holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
-            float speed = books.get(index).getBookInfoBean().getChapterlist().size()*1.0f/100;
+            holder.mpbDurprogress.setMaxProgress(mLeast.getBookInfoBean().getChapterlist().size());
+            float speed = mLeast.getBookInfoBean().getChapterlist().size()*1.0f/100;
 
             holder.mpbDurprogress.setSpeed(speed<=0?1:speed);
             holder.mpbDurprogress.setProgressListener(new OnProgressListener() {
@@ -303,16 +315,16 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
                 }
             });
             if (needAnim) {
-                holder.mpbDurprogress.setDurProgressWithAnim(books.get(index).getDurChapter());
+                holder.mpbDurprogress.setDurProgressWithAnim(mLeast.getDurChapter());
             } else {
-                holder.mpbDurprogress.setDurProgress(books.get(index).getDurChapter());
+                holder.mpbDurprogress.setDurProgress(mLeast.getDurChapter());
             }
             holder.tvWatch.setText("继续阅读");
             holder.tvWatch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != itemClickListener) {
-                        itemClickListener.onClick(books.get(index), index);
+                        itemClickListener.onClick(mLeast, index);
                     }
                 }
             });
@@ -412,7 +424,9 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
         if (null != newDatas && newDatas.size() > 0) {
             books.addAll(newDatas);
         }
-        order();
+//        order();
+
+        mLeast = getLeatestBook();
 
         notifyDataSetChanged();
     }
@@ -435,5 +449,26 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
 
     public List<BookShelfBean> getBooks() {
         return books;
+    }
+
+    /**
+     * 获取最近的
+     * @return
+     */
+    private  BookShelfBean getLeatestBook() {
+        if (books == null || books.size() == 0) {
+            return null;
+        }
+        BookShelfBean bean = Collections.max(books, new Comparator<BookShelfBean>() {
+            @Override
+            public int compare(BookShelfBean o1, BookShelfBean o2) {
+                if (o1.getFinalDate() == o2.getFinalDate()) {
+                    return 0;
+                }
+                return o1.getFinalDate() < o2.getFinalDate() ? -1 : 1;
+            }
+        });
+        return bean;
+
     }
 }

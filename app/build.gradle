@@ -9,7 +9,7 @@ android {
         applicationId "com.minnovel.weiweiyixiaohenqingcheng"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 9
+        versionCode 10
         versionName "1.2.4"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
         multiDexEnabled true

@@ -291,7 +291,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                 @Override
                 public void subscribe(ObservableEmitter<BookShelfBean> e) throws Exception {
                     bookShelf.setFinalDate(System.currentTimeMillis());
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
+                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().update(bookShelf);
                     e.onNext(bookShelf);
                     e.onComplete();
                 }

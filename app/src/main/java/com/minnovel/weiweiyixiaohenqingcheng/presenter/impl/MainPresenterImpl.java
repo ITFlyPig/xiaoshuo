@@ -58,7 +58,11 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         Observable.create(new ObservableOnSubscribe<List<BookShelfBean>>() {
             @Override
             public void subscribe(ObservableEmitter<List<BookShelfBean>> e) throws Exception {
-                List<BookShelfBean> bookShelfes = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+//                List<BookShelfBean> bookShelfes = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+                List<BookShelfBean> bookShelfes = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().loadAll();
+
+
+
                 for (int i = 0; i < bookShelfes.size(); i++) {
                     List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder().where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfes.get(i).getNoteUrl())).limit(1).build().list();
                     if (temp != null && temp.size() > 0) {
@@ -105,7 +109,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
      */
     @Override
     public void loadNovelsFromAssets() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 super.run();
@@ -145,11 +149,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
             }
         }.start();
-
-
-
-
-
 
 
     }
@@ -233,6 +232,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     /**
      * 从数据库获取信息
+     *
      * @return
      */
     private List<NovelBean> getDataInfoFromDB() {
@@ -259,7 +259,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     novelBean.name = novelBean.name + ".txt";
                 }
                 noves.add(novelBean);
-                Log.d("wyl", "获得小说数据：" + bookName + " " + novelBean.name);
+                Log.d("wyl", "获得小说数据：" + bookName + " " + novelBean.name + " 封面数据：" + logo);
 
             }
             return noves;

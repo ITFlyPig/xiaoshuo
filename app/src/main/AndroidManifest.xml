@@ -45,6 +45,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/CAppTransparentTheme" />
         <activity
+            android:name="com.minnovel.weiweiyixiaohenqingcheng.view.impl.DownProApp"
+            android:screenOrientation="portrait"
+            android:theme="@style/CAppTransparentTheme" />
+
+
+        <activity
             android:name=".view.impl.ReadBookActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
@@ -92,4 +98,6 @@
 
     <uses-sdk android:minSdkVersion="8"></uses-sdk>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
 </manifest>

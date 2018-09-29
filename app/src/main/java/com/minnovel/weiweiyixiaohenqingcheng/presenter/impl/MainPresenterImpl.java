@@ -52,12 +52,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
 
+
+    private boolean mIsRefreshing;
+
     public void queryBookShelf(final Boolean needRefresh) {
+        if (mIsRefreshing) {
+            return;
+        }
         if (needRefresh)
             mView.activityRefreshView();
         Observable.create(new ObservableOnSubscribe<List<BookShelfBean>>() {
             @Override
             public void subscribe(ObservableEmitter<List<BookShelfBean>> e) throws Exception {
+                mIsRefreshing = true;
 //                List<BookShelfBean> bookShelfes = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
                 List<BookShelfBean> bookShelfes = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().loadAll();
 
@@ -93,13 +100,21 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                                     loadNovelsFromAssets();
                                 }
                             }
+                            for (BookShelfBean bean : value) {
+                                Log.d("mmmm", "查询到的书名：" + bean.getBookInfoBean().getName() + " logo：" + bean.getBookInfoBean().getCoverUrl());
+
+                            }
+
                         }
+
+                        mIsRefreshing = false;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         mView.refreshError(NetworkUtil.getErrorTip(NetworkUtil.ERROR_CODE_ANALY));
+                        mIsRefreshing = false;
                     }
                 });
     }

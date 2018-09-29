@@ -101,6 +101,21 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
         }
     }
 
+    @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        if (holder != null) {
+            if (holder instanceof OtherViewHolder) {
+                OtherViewHolder otherViewHolder = (OtherViewHolder) holder;
+                Glide.clear(otherViewHolder.ivCover_1);
+                Glide.clear(otherViewHolder.ivCover_2);
+                Glide.clear(otherViewHolder.ivCover_3);
+            }
+
+        }
+
+        super.onViewRecycled(holder);
+    }
+
     private void bindOtherViewHolder(final OtherViewHolder holder, int index) {
         final int index_1 = index * 3;
         if (needAnim) {
@@ -125,9 +140,12 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
 
 
         ApplicationInfo appInfo = holder.ivCover_1.getContext().getApplicationInfo();
-        int resID = holder.ivCover_1.getContext().getResources().getIdentifier(books.get(index).getBookInfoBean().getCoverUrl(), "drawable", appInfo.packageName);
-        Glide.with(holder.ivCover_1.getContext()).load(resID).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
+        String logo = books.get(index_1).getBookInfoBean().getCoverUrl();
+        int resID = holder.ivCover_1.getContext().getResources().getIdentifier(logo, "drawable", appInfo.packageName);
+//        Glide.with(holder.ivCover_1.getContext()).load(resID).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
 
+        holder.ivCover_1.setImageResource(resID);
+        Log.d("mmm", "bindOtherViewHolder 书名：" + books.get(index_1).getBookInfoBean().getName() + " 封面： " + logo);
         holder.tvName_1.setText(books.get(index_1).getBookInfoBean().getName());
 
         holder.ibContent_1.setOnClickListener(new View.OnClickListener() {
@@ -170,7 +188,9 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
                 holder.flContent_2.setVisibility(View.VISIBLE);
             }
             int resID2 = holder.ivCover_2.getContext().getResources().getIdentifier(books.get(index_2).getBookInfoBean().getCoverUrl(), "drawable", appInfo.packageName);
-            Glide.with(holder.ivCover_2.getContext()).load(resID2).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
+            Log.d("mmm", "bindOtherViewHolder 书名：" + books.get(index_2).getBookInfoBean().getName() + " 封面： " + books.get(index_2).getBookInfoBean().getCoverUrl());
+//            Glide.with(holder.ivCover_2.getContext()).load(resID2).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
+            holder.ivCover_2.setImageResource(resID2);
 
             holder.tvName_2.setText(books.get(index_2).getBookInfoBean().getName());
 
@@ -214,9 +234,12 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
                 } else {
                     holder.flContent_3.setVisibility(View.VISIBLE);
                 }
-                int resID3 = holder.ivCover_3.getContext().getResources().getIdentifier(books.get(index_3).getBookInfoBean().getCoverUrl(), "drawable", appInfo.packageName);
-                Glide.with(holder.ivCover_3.getContext()).load(resID3).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
+                String logo3 =books.get(index_3).getBookInfoBean().getCoverUrl();
+                int resID3 = holder.ivCover_3.getContext().getResources().getIdentifier(logo3, "drawable", appInfo.packageName);
+//                Glide.with(holder.ivCover_3.getContext()).load(resID3).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
+                holder.ivCover_3.setImageResource(resID3);
                 holder.tvName_3.setText(books.get(index_3).getBookInfoBean().getName());
+                Log.d("mmm", "bindOtherViewHolder 书名：" + books.get(index_3).getBookInfoBean().getName() + " 封面： " + books.get(index_3).getBookInfoBean().getCoverUrl());
 
                 holder.ibContent_3.setOnClickListener(new View.OnClickListener() {
                     @Override

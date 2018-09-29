@@ -31,6 +31,7 @@ import com.minnovel.weiweiyixiaohenqingcheng.base.MBaseActivity;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.DownloadChapterBean;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.DownloadChapterListBean;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.ReadBookPresenterImpl;
+import com.minnovel.weiweiyixiaohenqingcheng.utils.PayStatusUtil;
 import com.minnovel.weiweiyixiaohenqingcheng.view.popupwindow.CheckAddShelfPop;
 import com.minnovel.weiweiyixiaohenqingcheng.view.popupwindow.FontPop;
 import com.minnovel.weiweiyixiaohenqingcheng.view.popupwindow.MoreSettingPop;
@@ -189,30 +190,36 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         chapterListView = (ChapterListView) findViewById(R.id.clp_chapterlist);
         mAdview = (AdView) findViewById(R.id.ad_view);
         //加载广告
-        AdRequest adRequest = new AdRequest
-                .Builder()
-                .addTestDevice("6BE2C83F240CE7288ABEF3312795F767")
-                .build();
-        mAdview.loadAd(adRequest);
+        if (PayStatusUtil.isSubAvailable()) {
+            AdRequest adRequest = new AdRequest
+                    .Builder()
+//                .addTestDevice("6BE2C83F240CE7288ABEF3312795F767")
+                    .build();
+            mAdview.loadAd(adRequest);
 
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id));//我的AdMob广告单元ID
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
+            mInterstitialAd = new InterstitialAd(this);
+            mInterstitialAd.setAdUnitId(getResources().getString(R.string.ad_unit_id));//我的AdMob广告单元ID
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    if (mInterstitialAd.isLoaded()) {
+                        mInterstitialAd.show();
+                    }
                 }
-            }
-        });
-        requestNewInterstitial();
+            });
+            requestNewInterstitial();
+        }
+
+
+
+
     }
 
     //开始初始化请求
     public void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("6BE2C83F240CE7288ABEF3312795F767")//app未打包时作为或者测试广告成功性时需写上测试手机的md5值（可到控制台查看logcat得到）
+//                .addTestDevice("6BE2C83F240CE7288ABEF3312795F767")//app未打包时作为或者测试广告成功性时需写上测试手机的md5值（可到控制台查看logcat得到）
                 .build();
         mInterstitialAd.loadAd(adRequest);
     }

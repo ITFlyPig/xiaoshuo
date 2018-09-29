@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.minnovel.weiweiyixiaohenqingcheng"
         minSdkVersion 17
-        targetSdkVersion 25
-        versionCode 10
-        versionName "1.2.4"
+        targetSdkVersion 26
+        versionCode 12
+        versionName "1.2.5"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
         multiDexEnabled true
     }
@@ -112,6 +112,12 @@ dependencies {
 
     compile 'com.google.android.gms:play-services:11.0.1'
     compile 'com.google.android.gms:play-services-ads:11.0.1'
+
+    //谷歌内购
+    compile 'com.android.billingclient:billing:1.0'
+
+    //发通知的
+    compile 'org.greenrobot:eventbus:3.0.0'
 
 }
 

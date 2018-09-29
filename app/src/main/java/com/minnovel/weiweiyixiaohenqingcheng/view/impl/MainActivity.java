@@ -4,6 +4,7 @@ package com.minnovel.weiweiyixiaohenqingcheng.view.impl;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,24 +13,31 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.Purchase;
 import com.minnovel.weiweiyixiaohenqingcheng.BitIntentDataManager;
+import com.minnovel.weiweiyixiaohenqingcheng.MApplication;
 import com.minnovel.weiweiyixiaohenqingcheng.R;
 import com.minnovel.weiweiyixiaohenqingcheng.base.MBaseActivity;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.BookShelfBean;
+import com.minnovel.weiweiyixiaohenqingcheng.bean.PayStatusEvent;
 import com.minnovel.weiweiyixiaohenqingcheng.dao.AssetsDatabaseManager;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.IMainPresenter;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.BookDetailPresenterImpl;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.MainPresenterImpl;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.ReadBookPresenterImpl;
+import com.minnovel.weiweiyixiaohenqingcheng.utils.GoogleBillingUtil;
+import com.minnovel.weiweiyixiaohenqingcheng.utils.PayStatusUtil;
 import com.minnovel.weiweiyixiaohenqingcheng.view.IMainView;
 import com.minnovel.weiweiyixiaohenqingcheng.view.adapter.BookShelfAdapter;
 import com.minnovel.weiweiyixiaohenqingcheng.view.popupwindow.DownloadListPop;
 import com.minnovel.weiweiyixiaohenqingcheng.widget.refreshview.OnRefreshWithProgressListener;
 import com.minnovel.weiweiyixiaohenqingcheng.widget.refreshview.RefreshRecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
-public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
+public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView, View.OnClickListener {
     private ImageButton ibMoney;
     private ImageButton ibLibrary;
     private ImageButton ibAdd;
@@ -42,7 +50,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private ImageView ivWarnClose;
 
     private DownloadListPop downloadListPop;
+    private static   GoogleBillingUtil googleBillingUtil;
+    private static MyOnStartSetupFinishedListener mOnStartSetupFinishedListener = new MyOnStartSetupFinishedListener();//启动结果回调接口
+    private static MyOnPurchaseFinishedListener mOnPurchaseFinishedListener = new MyOnPurchaseFinishedListener();//购买回调接口
 
+    private View vRemoveAd;
     @Override
     protected IMainPresenter initInjector() {
         return new MainPresenterImpl();
@@ -53,6 +65,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         // 初始化，只需要调用一次
         AssetsDatabaseManager.initManager(getApplication());
         setContentView(R.layout.activity_main);
+
+        checkSub();
     }
 
     @Override
@@ -80,6 +94,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
         flWarn = (FrameLayout) findViewById(R.id.fl_warn);
         ivWarnClose = (ImageView) findViewById(R.id.iv_warn_close);
+        vRemoveAd = findViewById(R.id.tv_remove_id);
+        vRemoveAd.setOnClickListener(this);
 
     }
 
@@ -247,5 +263,118 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             finish();
             System.exit(0);
         }
+    }
+
+    /**
+     * 检查有效订阅
+     */
+    public static void checkSub() {
+
+
+        GoogleBillingUtil.cleanListener();
+        if (GoogleBillingUtil.getInstance().isReady()) {
+            handleSubSize();
+        } else {
+            googleBillingUtil = GoogleBillingUtil.getInstance()
+                    .setOnStartSetupFinishedListener(mOnStartSetupFinishedListener)
+                    .setOnPurchaseFinishedListener(mOnPurchaseFinishedListener)
+                    .build();
+        }
+
+
+    }
+
+    private static void handleSubSize() {
+        int size = googleBillingUtil.getPurchasesSizeSubs();
+
+        Toast.makeText(MApplication.getInstance(), "有效订阅的数量：" + size, Toast.LENGTH_LONG).show();
+
+        if (size > 0) {
+            PayStatusUtil.savePaySubStatus(true);
+        } else {
+            PayStatusUtil.savePaySubStatus(false);
+        }
+
+        EventBus.getDefault().post(new PayStatusEvent());
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_remove_id:
+                Intent intent = new Intent(this, DownProApp.class);
+                startActivity(intent);
+                break;
+        }
+    }
+
+    //服务初始化结果回调接口
+    private static class MyOnStartSetupFinishedListener implements GoogleBillingUtil.OnStartSetupFinishedListener {
+        @Override
+        public void onSetupSuccess() {
+            Log.d("wyl", "服务初始化结果回调接口 onSetupSuccess");
+
+
+            Log.d("wyl", "开始查询已经购买商品");
+            List<Purchase> inapps = googleBillingUtil.queryPurchasesInApp();
+            if (inapps != null) {
+                for (Purchase inapp : inapps) {
+                    Log.d("wyl", "已经购买的商品：" + inapp.getSku());
+                }
+            }
+            Log.d("wyl", "开始查询已经订阅商品");
+            List<Purchase> subs = googleBillingUtil.queryPurchasesSubs();
+            Log.d("wyl", "已经订阅的商品：" + (subs == null ? 0 : subs.size()));
+
+            if (subs != null) {
+                for (Purchase sub : subs) {
+                    Log.d("wyl", "已经订阅的商品：" + sub.getSku());
+                }
+            }
+
+            handleSubSize();
+
+        }
+
+        @Override
+        public void onSetupFail(int responseCode) {
+            Log.d("wyl", "服务初始化结果回调接口 onSetupFail");
+
+        }
+
+        @Override
+        public void onSetupError() {
+            Log.d("wyl", "服务初始化结果回调接口 onSetupError");
+
+        }
+    }
+
+    //购买商品回调接口
+    private static class MyOnPurchaseFinishedListener implements GoogleBillingUtil.OnPurchaseFinishedListener {
+        @Override
+        public void onPurchaseSuccess(List<Purchase> list) {
+            //内购或者订阅成功,可以通过purchase.getSku()获取suk进而来判断是哪个商品
+            Log.d("wyl", "购买商品回调接口 onPurchaseSuccess");
+
+        }
+
+        @Override
+        public void onPurchaseFail(int responseCode) {
+            Log.d("wyl", "购买商品回调接口 onPurchaseFail：" + responseCode);
+
+        }
+
+        @Override
+        public void onPurchaseError() {
+            Log.d("wyl", "购买商品回调接口 onPurchaseError");
+
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkSub();
     }
 }

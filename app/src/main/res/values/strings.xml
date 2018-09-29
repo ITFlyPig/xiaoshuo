@@ -19,4 +19,10 @@
     <string name="bannerunit">ca-app-pub-9224978836240566/5689984536</string>
     <string name="ad_unit_id">ca-app-pub-9224978836240566/1570259202</string>
     <string name="openscreen">ca-app-pub-4391447140300687/5225384052</string>
+    <string name="remove_ad">Remove ads</string>
+    <string name="downtitle">Free Trial Remove ads</string>
+    <string name="one">No Ads.</string>
+    <string name="two">Totally use offline.</string>
+    <string name="three">No Connection required. No roaming charge.</string>
+
 </resources>

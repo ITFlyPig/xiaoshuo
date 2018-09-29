@@ -12,7 +12,7 @@
         android:background="#ffffff"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:orientation="horizontal">
@@ -21,7 +21,7 @@
                 android:id="@+id/iv_logo"
                 android:layout_width="119dp"
                 android:layout_height="21dp"
-                android:layout_gravity="center_vertical"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
 
                 android:src="@drawable/icon_monkovel_black" />
@@ -70,7 +70,20 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_ib_pre"
                 android:src="@drawable/selector_iv_add" />
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_remove_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#007AFF"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/remove_ad"
+                android:textSize="15sp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
 
         <com.minnovel.weiweiyixiaohenqingcheng.widget.refreshview.RefreshRecyclerView
             android:id="@+id/rf_rv_shelf"

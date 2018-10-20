@@ -2,4 +2,9 @@
 <resources>
     <string name="remove_ad">去掉广告</string>
     <string name="title">热门电视剧小说大全</string>
+    <string name="downtitle">免费试用无广告专业版</string>
+    <string name="one">无广告</string>
+    <string name="two">完全离线使用</string>
+    <string name="three">无需联网，不费数据流量</string>
+
 </resources>

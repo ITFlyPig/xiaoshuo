@@ -46,8 +46,8 @@
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name="com.minnovel.weiweiyixiaohenqingcheng.view.impl.DownProApp"
-            android:screenOrientation="portrait"
-            android:theme="@style/CAppTransparentTheme" />
+            android:theme="@style/CAppTransparentTheme"
+            />
 
 
         <activity

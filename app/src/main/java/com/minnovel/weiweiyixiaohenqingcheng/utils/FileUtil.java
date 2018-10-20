@@ -61,7 +61,7 @@ public class FileUtil {
         if (context == null || TextUtils.isEmpty(name)) {
             return null;
         }
-        File cache = context.getExternalFilesDir(null);
+        File cache = context.getCacheDir();
         String novelDir = cache.getAbsolutePath() + File.separator + name;
         File novelDirFile = new File(novelDir);
         if (novelDirFile.exists()) {

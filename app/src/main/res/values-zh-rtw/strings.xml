@@ -2,5 +2,9 @@
 <resources>
     <string name="remove_ad">幹掉廣告</string>
     <string name="title">熱門陸劇小說大全</string>
+    <string name="downtitle">免費試用無廣告專業版</string>
+    <string name="one">無廣告</string>
+    <string name="two">完全離線使用</string>
+    <string name="three">無需聯網，不費数据流量"</string>
 
 </resources>

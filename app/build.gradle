@@ -8,8 +8,8 @@ android {
     defaultConfig {
         applicationId "com.minnovel.weiweiyixiaohenqingcheng"
         minSdkVersion 17
-        targetSdkVersion 26
-        versionCode 14
+        targetSdkVersion 28
+        versionCode 15
         versionName "1.2.7"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
         multiDexEnabled true

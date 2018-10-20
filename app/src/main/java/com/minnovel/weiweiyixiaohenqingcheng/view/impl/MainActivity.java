@@ -155,7 +155,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 LoadingDailog.Builder loadBuilder = new LoadingDailog.Builder(getContext())
                         .setMessage("为您解析中...")
                         .setCancelable(true)
-                        .setCancelOutside(true);
+                        .setCancelOutside(false);
                 final LoadingDailog dialog = loadBuilder.create();
                 dialog.show();
 

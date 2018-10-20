@@ -9,6 +9,7 @@ import com.minnovel.weiweiyixiaohenqingcheng.dao.BookInfoBeanDao;
 import com.minnovel.weiweiyixiaohenqingcheng.dao.BookShelfBeanDao;
 import com.minnovel.weiweiyixiaohenqingcheng.dao.ChapterListBeanDao;
 import com.minnovel.weiweiyixiaohenqingcheng.dao.DbHelper;
+import com.minnovel.weiweiyixiaohenqingcheng.utils.Logger;
 import com.monke.basemvplib.impl.BaseModelImpl;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.BookShelfBean;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.ChapterListBean;
@@ -42,6 +43,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
 
     @Override
     public Observable<LocBookShelfBean> importBook(final File book) {
+        Logger.i("tte", "importBook 走了不希望的路径");
         return Observable.create(new ObservableOnSubscribe<LocBookShelfBean>() {
             @Override
             public void subscribe(ObservableEmitter<LocBookShelfBean> e) throws Exception {
@@ -97,46 +99,61 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 if (novelBean == null) {
                     return;
                 }
-                MessageDigest md = MessageDigest.getInstance("MD5");
-                File book = new File(novelBean.path);
-                FileInputStream in = new FileInputStream(book);
-                byte[] buffer = new byte[2048];
-                int len;
-                while ((len = in.read(buffer, 0, 2048)) != -1) {
-                    md.update(buffer, 0, len);
-                }
-                in.close();
-                in = null;
-
-                String md5 = new BigInteger(1, md.digest()).toString(16);
+//                MessageDigest md = MessageDigest.getInstance("MD5");
+//                File book = new File(novelBean.path);
+//                FileInputStream in = new FileInputStream(book);
+//                byte[] buffer = new byte[2048];
+//                int len;
+//                while ((len = in.read(buffer, 0, 2048)) != -1) {
+//                    md.update(buffer, 0, len);
+//                }
+//                in.close();
+//                in = null;
+//
+//                String md5 = new BigInteger(1, md.digest()).toString(16);
+                Logger.i("tt", "importBook 开始创建书籍信息并且存入数据库");
                 BookShelfBean bookShelfBean = null;
-                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(md5)).build().list();
+//                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(md5)).build().list();
+
+                String bookPath = (novelBean.path == null ? "" : novelBean.path);
+
+
+
+                //据path查询对应的书籍
+                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookPath)).build().list();
                 Boolean isNew = true;
-                if (temp!=null && temp.size()>0) {
+
+                if (temp!=null && temp.size()>0) {//查询到对应的书籍
+
                     isNew = false;
                     bookShelfBean = temp.get(0);
+                    //设置对应的BookInfo书籍信息
+                    Logger.i("tt", "importBook 已存在对应的书籍：NoteUrl：" + bookShelfBean.getNoteUrl());
+
                     bookShelfBean.setBookInfoBean(DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder().where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).build().list().get(0));
-                } else {
+                } else {//没有对应的书籍
                     bookShelfBean = new BookShelfBean();
                     bookShelfBean.setFinalDate(System.currentTimeMillis());
                     bookShelfBean.setDurChapter(0);
                     bookShelfBean.setDurChapterPage(0);
                     bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
-                    bookShelfBean.setNoteUrl(md5);
+                    bookShelfBean.setNoteUrl(bookPath);//在这里NoteUrl和path等价
 
                     bookShelfBean.getBookInfoBean().setAuthor("佚名");
                     bookShelfBean.getBookInfoBean().setName(novelBean.showName);
                     bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
                     bookShelfBean.getBookInfoBean().setCoverUrl(novelBean.coverName);
                     Log.d("cover", "设置封面：importBook" + novelBean.coverName);
-                    bookShelfBean.getBookInfoBean().setNoteUrl(md5);
+                    bookShelfBean.getBookInfoBean().setNoteUrl(bookPath);
                     bookShelfBean.getBookInfoBean().setTag(BookShelfBean.LOCAL_TAG);
 
-                    saveChapter(book, md5);
+//                    saveChapter(book, md5);//解析保存章节信息
                     DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
                     DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+
+                    Logger.i("tt", "importBook 创建书籍信息并保存：" + bookShelfBean.toString());
                 }
-                bookShelfBean.getBookInfoBean().setChapterlist(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder().where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
+//                bookShelfBean.getBookInfoBean().setChapterlist(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder().where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());//章节信息
                 e.onNext(new LocBookShelfBean(isNew,bookShelfBean));
                 e.onComplete();
             }
@@ -162,7 +179,13 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
         }
     }
 
-    private void saveChapter(File book, String md5) throws IOException {
+    /**
+     * 解析保存章节信息
+     * @param book
+     * @param md5
+     * @throws IOException
+     */
+    public void saveChapter(File book, String md5) throws IOException {
         String regex = "第.{1,7}章.{0,}";
 
         String encoding;
@@ -230,7 +253,18 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
         fis = null;
     }
 
+    /**
+     * 保存章节信息
+     * @param md5
+     * @param chapterPageIndex
+     * @param name
+     * @param content
+     */
     private void saveDurChapterContent(String md5, int chapterPageIndex, String name, String content) {
+        Logger.i("tt", "saveDurChapterContent 保存章节信息：md5" + md5 + "\n"
+        + "chapterPageIndex:" + chapterPageIndex + "\n"
+        + "name:" + name + "\n"
+        + "content:" + content );
         ChapterListBean chapterListBean = new ChapterListBean();
         chapterListBean.setNoteUrl(md5);
         chapterListBean.setDurChapterIndex(chapterPageIndex);

@@ -11,16 +11,22 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.billingclient.api.Purchase;
+import com.android.tu.loadingdialog.LoadingDailog;
 import com.minnovel.weiweiyixiaohenqingcheng.BitIntentDataManager;
 import com.minnovel.weiweiyixiaohenqingcheng.MApplication;
 import com.minnovel.weiweiyixiaohenqingcheng.R;
 import com.minnovel.weiweiyixiaohenqingcheng.base.MBaseActivity;
+import com.minnovel.weiweiyixiaohenqingcheng.bean.BookInfoBean;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.BookShelfBean;
+import com.minnovel.weiweiyixiaohenqingcheng.bean.ChapterListBean;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.PayStatusEvent;
 import com.minnovel.weiweiyixiaohenqingcheng.dao.AssetsDatabaseManager;
+import com.minnovel.weiweiyixiaohenqingcheng.dao.ChapterListBeanDao;
+import com.minnovel.weiweiyixiaohenqingcheng.dao.DbHelper;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.IMainPresenter;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.BookDetailPresenterImpl;
 import com.minnovel.weiweiyixiaohenqingcheng.presenter.impl.MainPresenterImpl;
@@ -55,6 +61,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private static MyOnPurchaseFinishedListener mOnPurchaseFinishedListener = new MyOnPurchaseFinishedListener();//购买回调接口
 
     private View vRemoveAd;
+    private TextView tvTitle;
+
     @Override
     protected IMainPresenter initInjector() {
         return new MainPresenterImpl();
@@ -96,6 +104,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         ivWarnClose = (ImageView) findViewById(R.id.iv_warn_close);
         vRemoveAd = findViewById(R.id.tv_remove_id);
         vRemoveAd.setOnClickListener(this);
+        tvTitle = (TextView)vRemoveAd.findViewById(R.id.tv_title);
 
     }
 
@@ -137,18 +146,65 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             }
 
             @Override
-            public void onClick(BookShelfBean bookShelfBean, int index) {
-                Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
-                intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
-                String key = String.valueOf(System.currentTimeMillis());
-                intent.putExtra("data_key", key);
-                try {
-                    BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
-                } catch (CloneNotSupportedException e) {
-                    BitIntentDataManager.getInstance().putData(key, bookShelfBean);
-                    e.printStackTrace();
+            public void onClick(final BookShelfBean bookShelfBean, int index) {
+                if (bookShelfBean == null) {
+                    return;
                 }
-                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
+
+
+                LoadingDailog.Builder loadBuilder = new LoadingDailog.Builder(getContext())
+                        .setMessage("为您解析中...")
+                        .setCancelable(true)
+                        .setCancelOutside(true);
+                final LoadingDailog dialog = loadBuilder.create();
+                dialog.show();
+
+                final BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
+                if (bookInfoBean == null) {
+                    return;
+                }
+
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        mPresenter.parseBookInfo(bookInfoBean.getNoteUrl());
+                        //获取一次章节信息
+                        if (bookInfoBean.getChapterlist() == null || bookInfoBean.getChapterlist().size() <= 0) {
+                            List<ChapterListBean> chapters = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder().where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list();
+                            bookInfoBean.setChapterlist(chapters);
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
+                                intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
+                                String key = String.valueOf(System.currentTimeMillis());
+                                intent.putExtra("data_key", key);
+                                try {
+                                    BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
+                                } catch (CloneNotSupportedException e) {
+                                    BitIntentDataManager.getInstance().putData(key, bookShelfBean);
+                                    e.printStackTrace();
+                                }
+                                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
+                                dialog.cancel();
+                            }
+                        });
+
+                    }
+                }.start();
+
+
+
+
+
+
+
+//
+//
+
             }
 
             @Override
@@ -287,7 +343,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private static void handleSubSize() {
         int size = googleBillingUtil.getPurchasesSizeSubs();
 
-        Toast.makeText(MApplication.getInstance(), "有效订阅的数量：" + size, Toast.LENGTH_LONG).show();
+//        Toast.makeText(MApplication.getInstance(), "有效订阅的数量：" + size, Toast.LENGTH_LONG).show();
 
         if (size > 0) {
             PayStatusUtil.savePaySubStatus(true);

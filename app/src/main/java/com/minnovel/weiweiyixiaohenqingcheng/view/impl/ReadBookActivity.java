@@ -190,7 +190,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         chapterListView = (ChapterListView) findViewById(R.id.clp_chapterlist);
         mAdview = (AdView) findViewById(R.id.ad_view);
         //加载广告
-        if (PayStatusUtil.isSubAvailable()) {
+        if (!PayStatusUtil.isSubAvailable()) {
             AdRequest adRequest = new AdRequest
                     .Builder()
 //                .addTestDevice("6BE2C83F240CE7288ABEF3312795F767")

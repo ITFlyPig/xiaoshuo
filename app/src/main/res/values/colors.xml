@@ -19,4 +19,5 @@
     <color name="white">#ffffff</color>
     <color name="appbg">#f6f6f6</color>
     <color name="black">#000000</color>
+    <color name="line_bg">#DCDCDC</color>
 </resources>

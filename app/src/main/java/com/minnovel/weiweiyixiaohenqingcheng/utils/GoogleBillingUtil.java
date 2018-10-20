@@ -71,7 +71,7 @@ public class GoogleBillingUtil {
     private static final String TAG = "GoogleBillingUtil";
 
     public static String[] inAppSKUS = new String[]{};//内购ID,必填
-    public static String[] subsSKUS = new String[]{"lujuxiaoshuo_subscription_01"};//订阅ID,必填
+    public static String[] subsSKUS = new String[]{"minnovel_subscription_01"};//订阅ID,必填
 
     public static final String BILLING_TYPE_INAPP = BillingClient.SkuType.INAPP;//内购
     public static final String BILLING_TYPE_SUBS = BillingClient.SkuType.SUBS;//订阅
@@ -249,8 +249,10 @@ public class GoogleBillingUtil {
             }
             if (responseCode == BillingClient.BillingResponse.OK && list != null) {
                 mOnQueryFinishedListener.onQuerySuccess(skuType, list);
+                Logger.i("wyl", "GoogleBillingUtil 内购数：" + list.size());
             } else {
                 mOnQueryFinishedListener.onQueryFail(responseCode);
+                Logger.i("wyl", "GoogleBillingUtil 内购查询失败");
             }
         }
 

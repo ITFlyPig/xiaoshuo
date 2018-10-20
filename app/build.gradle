@@ -9,8 +9,8 @@ android {
         applicationId "com.minnovel.weiweiyixiaohenqingcheng"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 12
-        versionName "1.2.5"
+        versionCode 14
+        versionName "1.2.7"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
         multiDexEnabled true
     }
@@ -37,6 +37,22 @@ android {
         javaMaxHeapSize "4g"
     }
 
+
+    signingConfigs {
+        debug {
+            storeFile file("../lujunovel")
+            storePassword "1234hijk"
+            keyPassword "1234hijk"
+            keyAlias "lujunovel"
+        }
+        release {
+            storeFile file("../lujunovel")
+            storePassword "1234hijk"
+            keyPassword "1234hijk"
+            keyAlias "lujunovel"
+        }
+    }
+
     buildTypes {
         release {
             buildConfigField "boolean", "IS_RELEASE", "true"
@@ -47,17 +63,28 @@ android {
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         //这里修改apk文件名
-                        def fileName = "陆剧小说大全" +"_"+"${variant.productFlavors[0].name}"+ "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ").apk"
+                        def fileName = "陆剧小说大全" +" r_"+"${variant.productFlavors[0].name}"+ "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ").apk"
                         output.outputFile = new File(outputFile.parent, fileName)
                     }
                 }
             }
+            signingConfig signingConfigs.release
         }
         debug {
             buildConfigField "boolean", "IS_RELEASE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.config
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        //这里修改apk文件名
+                        def fileName = "陆剧小说大全" +" d _"+"${variant.productFlavors[0].name}"+ "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ").apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+            signingConfig signingConfigs.debug
         }
     }
 }
@@ -118,6 +145,7 @@ dependencies {
 
     //发通知的
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.github.gittjy:LoadingDialog:1.0.2'
 
 }
 

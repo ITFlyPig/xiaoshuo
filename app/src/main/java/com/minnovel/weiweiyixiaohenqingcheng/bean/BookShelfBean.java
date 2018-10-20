@@ -141,4 +141,14 @@ public class BookShelfBean implements Parcelable,Cloneable{
         bookShelfBean.bookInfoBean = (BookInfoBean) bookInfoBean.clone();
         return bookShelfBean;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("书籍的noteUrl：" ).append(noteUrl).append("\n")
+                .append("书籍的path:").append(bookInfoBean.getNoteUrl()).append("\n")
+                .append("书籍的名称").append(bookInfoBean.getName());
+        return builder.toString();
+    }
 }

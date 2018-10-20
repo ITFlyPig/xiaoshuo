@@ -77,4 +77,22 @@ public class FileUtil {
     }
 
 
+    /**
+     * 据路劲获取文件的名字
+     * @param path
+     * @return
+     */
+    public static String getFileName(String path) {
+        if (TextUtils.isEmpty(path)) {
+            return null;
+        }
+        int i = path.lastIndexOf(File.separator);
+        int j = path.length();
+        if (i < j ) {
+            return path.substring(i + 1,j);
+        }
+        return null;
+
+    }
+
 }

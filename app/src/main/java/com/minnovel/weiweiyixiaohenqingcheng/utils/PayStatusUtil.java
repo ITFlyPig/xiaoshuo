@@ -1,6 +1,7 @@
 package com.minnovel.weiweiyixiaohenqingcheng.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 public class PayStatusUtil {
 
@@ -20,7 +21,9 @@ public class PayStatusUtil {
      * @return
      */
     public static boolean isSubAvailable() {
-        return SharedPreferenceUtil.getBooleanValueFromSP(Constant.Name_sp.BUY, Constant.Key_sp.SUB_STATUS, false);
+        boolean isSubAvailable = SharedPreferenceUtil.getBooleanValueFromSP(Constant.Name_sp.BUY, Constant.Key_sp.SUB_STATUS, false);
+        Log.d("wyl", "订阅是否有效：" + isSubAvailable);
+        return isSubAvailable;
     }
 
 

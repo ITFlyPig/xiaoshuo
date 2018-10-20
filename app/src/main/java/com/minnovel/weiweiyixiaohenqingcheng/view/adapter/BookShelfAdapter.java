@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.BookShelfBean;
+import com.minnovel.weiweiyixiaohenqingcheng.utils.Logger;
 import com.minnovel.weiweiyixiaohenqingcheng.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.minnovel.weiweiyixiaohenqingcheng.R;
 import com.minnovel.weiweiyixiaohenqingcheng.bean.BookShelfBean;
@@ -450,6 +451,7 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
 //        order();
 
         mLeast = getLeatestBook();
+        Logger.i("mm", "replaceAll  adapter中的数量：" + books.size());
 
         notifyDataSetChanged();
     }

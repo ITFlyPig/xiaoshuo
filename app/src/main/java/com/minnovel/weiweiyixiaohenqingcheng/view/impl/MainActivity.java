@@ -2,6 +2,7 @@
 package com.minnovel.weiweiyixiaohenqingcheng.view.impl;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -56,12 +57,13 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private ImageView ivWarnClose;
 
     private DownloadListPop downloadListPop;
-    private static   GoogleBillingUtil googleBillingUtil;
+    private static GoogleBillingUtil googleBillingUtil;
     private static MyOnStartSetupFinishedListener mOnStartSetupFinishedListener = new MyOnStartSetupFinishedListener();//启动结果回调接口
     private static MyOnPurchaseFinishedListener mOnPurchaseFinishedListener = new MyOnPurchaseFinishedListener();//购买回调接口
 
     private View vRemoveAd;
     private TextView tvTitle;
+    private TextView tvRate;
 
     @Override
     protected IMainPresenter initInjector() {
@@ -104,7 +106,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         ivWarnClose = (ImageView) findViewById(R.id.iv_warn_close);
         vRemoveAd = findViewById(R.id.tv_remove_id);
         vRemoveAd.setOnClickListener(this);
-        tvTitle = (TextView)vRemoveAd.findViewById(R.id.tv_title);
+        tvTitle = (TextView) vRemoveAd.findViewById(R.id.tv_title);
+        tvRate = (TextView) findViewById(R.id.tv_rate);
+        tvRate.setOnClickListener(this);
 
     }
 
@@ -164,7 +168,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     return;
                 }
 
-                new Thread(){
+                new Thread() {
                     @Override
                     public void run() {
                         super.run();
@@ -195,11 +199,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
                     }
                 }.start();
-
-
-
-
-
 
 
 //
@@ -361,6 +360,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 Intent intent = new Intent(this, DownProApp.class);
                 startActivity(intent);
                 break;
+            case R.id.tv_rate:
+                rateApp();
+                break;
         }
     }
 
@@ -432,5 +434,26 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void onResume() {
         super.onResume();
         checkSub();
+    }
+
+    /**
+     * 给APP评分
+     */
+    private void rateApp() {
+        //这里开始执行一个应用市场跳转逻辑，默认this为Context上下文对象
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("market://details?id=com.minnovel.weiweiyixiaohenqingcheng")); //跳转到应用市场，非Google Play市场一般情况也实现了这个接口
+        if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
+            startActivity(intent);
+        } else { //没有应用市场，我们通过浏览器跳转到Google Play
+            intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.minnovel.weiweiyixiaohenqingcheng"));
+            if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
+                startActivity(intent);
+            } else {
+                //TODO 提示用户
+
+            }
+        }
+
     }
 }

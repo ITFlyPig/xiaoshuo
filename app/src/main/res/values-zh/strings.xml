@@ -6,5 +6,6 @@
     <string name="one">无广告</string>
     <string name="two">完全离线使用</string>
     <string name="three">无需联网，不费数据流量</string>
+    <string name="rate">评分鼓励</string>
 
 </resources>

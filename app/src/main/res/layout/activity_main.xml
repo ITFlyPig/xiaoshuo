@@ -94,6 +94,18 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
 
+            <TextView
+                android:id="@+id/tv_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#007AFF"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/rate"
+                android:textSize="15sp"
+                android:layout_centerVertical="true"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"

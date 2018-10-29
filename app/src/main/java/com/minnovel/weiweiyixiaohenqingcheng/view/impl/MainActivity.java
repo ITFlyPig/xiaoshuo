@@ -473,7 +473,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         View view = View.inflate(getContext(), R.layout.dialogunlock, null);
         rating_but = view.findViewById(R.id.rating_but);
         watch_video_ad_but = (TextView)view.findViewById(R.id.watch_video_ad_but);
-        rating_but.setOnClickListener(new View.OnClickListener() {
+        watch_video_ad_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                if (dialog != null) {
@@ -482,7 +482,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
             }
         });
-        watch_video_ad_but.setOnClickListener(new View.OnClickListener() {
+        rating_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (dialog != null) {

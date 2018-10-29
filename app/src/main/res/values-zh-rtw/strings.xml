@@ -8,4 +8,9 @@
     <string name="three">無需聯網，不費数据流量"</string>
     <string name="rate">評分按贊</string>
 
+    <string name="dialog_title">試用活動</string>
+    <string name="btn_bottom">暫不考慮</string>
+    <string name="content">感謝您的使用，我們想邀請你免費體驗PRO專業版（無廣告）7天</string>
+    <string name="btn_top">立即參與</string>
+
 </resources>

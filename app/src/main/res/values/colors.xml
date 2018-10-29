@@ -20,4 +20,7 @@
     <color name="appbg">#f6f6f6</color>
     <color name="black">#000000</color>
     <color name="line_bg">#DCDCDC</color>
+    <color name="gray">#dfdfdf</color>
+    <color name="appcolor">#0499ea</color>
+    <color name="transparent">#00000000</color>
 </resources>

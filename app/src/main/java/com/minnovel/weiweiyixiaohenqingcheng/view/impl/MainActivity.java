@@ -1,17 +1,22 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.minnovel.weiweiyixiaohenqingcheng.view.impl;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +82,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         setContentView(R.layout.activity_main);
 
         checkSub();
+
+        showTip();
     }
 
     @Override
@@ -454,6 +461,64 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
             }
         }
+
+    }
+
+
+    private Dialog dialog;
+    private View rating_but;
+    private View watch_video_ad_but;
+    private void showDialog(){
+        dialog= new Dialog(getContext(),R.style.dialog);
+        View view = View.inflate(getContext(), R.layout.dialogunlock, null);
+        rating_but = view.findViewById(R.id.rating_but);
+        watch_video_ad_but = (TextView)view.findViewById(R.id.watch_video_ad_but);
+        rating_but.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               if (dialog != null) {
+                   dialog.dismiss();
+               }
+
+            }
+        });
+        watch_video_ad_but.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                Intent intent = new Intent(MainActivity.this, DownProApp.class);
+                startActivity(intent);
+            }
+        });
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(view);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        window.setGravity(Gravity.BOTTOM);
+        lp.width = LinearLayout.LayoutParams.FILL_PARENT;
+        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.setCancelable(false);
+        //点击dialog之外的区域禁止取消dialog
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+    }
+
+    /**
+     * 弹出提示框
+     */
+    private void showTip() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showDialog();
+            }
+        }, 60 * 1000);
 
     }
 }

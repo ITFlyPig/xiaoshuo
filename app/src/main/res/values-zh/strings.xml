@@ -8,4 +8,9 @@
     <string name="three">无需联网，不费数据流量</string>
     <string name="rate">评分鼓励</string>
 
+    <string name="dialog_title">体验活动</string>
+    <string name="btn_bottom">暂不考虑</string>
+    <string name="content">感谢您的使用，我们想邀请你免费体验专业版（无广告）7天</string>
+    <string name="btn_top">立即前往</string>
+
 </resources>

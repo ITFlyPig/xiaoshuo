@@ -9,10 +9,11 @@ android {
         applicationId "com.minnovel.weiweiyixiaohenqingcheng"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 16
-        versionName "1.2.8"
+        versionCode 17
+        versionName "1.2.9"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
         multiDexEnabled true
+        flavorDimensions "default"
     }
 
     productFlavors{
@@ -64,7 +65,7 @@ android {
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         //这里修改apk文件名
                         def fileName = "陆剧小说大全" +" r_"+"${variant.productFlavors[0].name}"+ "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ").apk"
-                        output.outputFile = new File(outputFile.parent, fileName)
+//                        output.outputFile = new File(outputFile.parent, fileName)
                     }
                 }
             }
@@ -80,7 +81,7 @@ android {
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
                         //这里修改apk文件名
                         def fileName = "陆剧小说大全" +" d _"+"${variant.productFlavors[0].name}"+ "_v" + defaultConfig.versionName + "(" + defaultConfig.versionCode + ").apk"
-                        output.outputFile = new File(outputFile.parent, fileName)
+//                        output.outputFile = new File(outputFile.parent, fileName)
                     }
                 }
             }

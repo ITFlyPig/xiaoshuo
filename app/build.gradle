@@ -107,8 +107,8 @@ dependencies {
     compile 'com.android.support:support-compat:25.1.0'
     compile project(':basemvplib')
     //GreenDao
-    compile 'org.greenrobot:greendao:3.0.1'
-    compile 'org.greenrobot:greendao-generator:3.0.0'
+    compile 'org.greenrobot:greendao:3.3.0'
+//    compile 'org.greenrobot:greendao-generator:3.0.0'
     //JSOUP
     compile 'org.jsoup:jsoup:1.10.2'
     //沉浸式状态栏

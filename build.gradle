@@ -1,23 +1,31 @@
 
 buildscript {
     repositories {
+        google()
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
         jcenter()
         mavenCentral()
-        google()
+
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
-        classpath 'org.greenrobot:greendao-gradle-plugin:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.3.0'
         classpath 'com.google.gms:google-services:4.0.1'
     }
 }
 
 allprojects {
     repositories {
+        google()
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
         jcenter()
         maven { url 'https://www.jitpack.io' }
-        google()
+
     }
 }
 

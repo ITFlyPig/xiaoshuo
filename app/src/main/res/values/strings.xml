@@ -29,5 +29,7 @@
     <string name="btn_bottom">No,thanks</string>
     <string name="content">It is with great pleasure that we invite you to free trial PRO edition for 7days.PRO edition had removed all ads.</string>
     <string name="btn_top">Try it now</string>
+    <string name="title">热门电视剧小说大全</string>
 
+    <string name="rate">评分鼓励</string>
 </resources>

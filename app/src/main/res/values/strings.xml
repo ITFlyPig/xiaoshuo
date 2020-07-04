@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">陸劇小說大全</string>
 
-    <string name="umeng_key">5954b3f999f0c76d1b001600</string>
+    <string name="umeng_key">5b853c8ab27b0a538c000051</string>
 
     <string name="baidu_app_id">9942412</string>
     <string name="baidu_app_key">5cZ5UKGW2tqEXK0dUiv4ngLEQ7I4Bf6s</string>
@@ -32,4 +32,5 @@
     <string name="title">热门电视剧小说大全</string>
 
     <string name="rate">评分鼓励</string>
+    <string name="tip">This subscription gives you unlimited access to our app content library.If you don\'t cancel before the trial ends,you will be automaticaly charged $6.99 each month until you cancel.</string>
 </resources>

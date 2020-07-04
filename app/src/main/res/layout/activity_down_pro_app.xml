@@ -38,8 +38,9 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_content"
         android:layout_width="295dp"
-        android:layout_height="277dp"
+        android:layout_height="350dp"
         android:layout_below="@+id/rl_top"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
@@ -105,11 +106,19 @@
             android:textColor="#333333"
             android:textSize="15sp" />
 
+        <TextView
+            android:id="@+id/tv_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/tip"/>
+
         <RelativeLayout
             android:id="@+id/rl_down"
             android:layout_width="295dp"
             android:layout_height="44dp"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@id/tv_tip"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/shape_corner_bottom">
 
             <ImageView
@@ -130,6 +139,7 @@
                 android:textColor="@color/white"
                 android:textSize="15sp" />
         </RelativeLayout>
+
     </RelativeLayout>
 
     <ImageView
@@ -137,7 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_top"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="70dp"
         android:src="@mipmap/ic_launcher" />
 
 </RelativeLayout>

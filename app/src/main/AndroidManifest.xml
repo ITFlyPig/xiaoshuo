@@ -66,28 +66,12 @@
             android:theme="@style/CAppTransparentTheme" />
 
         <meta-data
-            android:name="BDAPPID"
-            android:value="@string/baidu_app_id" />
-        <meta-data
-            android:name="BDAPPKEY"
-            android:value="@string/baidu_app_key" />
-
-        <meta-data
             android:name="UMENG_CHANNEL_VALUE"
             android:value="${UMENG_CHANNEL_VALUE}" />
 
-        <meta-data android:value="5b853c8ab27b0a538c000051" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="@string/umeng_key" android:name="UMENG_APPKEY"/>
         <meta-data android:value="${UMENG_CHANNEL_VALUE}" android:name="UMENG_CHANNEL"/>
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/bdp_update_filepaths" />
-        </provider>
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

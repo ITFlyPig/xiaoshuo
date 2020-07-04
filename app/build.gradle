@@ -88,6 +88,11 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    dexOptions {
+        incremental true//打开dex增量编译  这还是一个实验性的功能，但是还是推荐打开试试
+        javaMaxHeapSize "4G"//设置允许分配的的最大堆内存
+    }
 }
 
 repositories{
